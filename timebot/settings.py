@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure--mo2q@ar9xg1h3_ewnu^rxx@pmf*%ez=69qs%m==fg5^8gl90m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourtimebot.herokuapp.com']
 
 
 # Application definition
