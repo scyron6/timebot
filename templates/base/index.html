@@ -1,0 +1,455 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <title>TimeBot</title>
+    <style>
+      .bg-purple {
+        background-color: #5d5dff;
+      }
+      .text-purple {
+        color: #5d5dff;
+      }
+
+      .text-blueGray-700 {
+        color: #334155;
+      }
+      .bg-blueGray-700 {
+        background-color: #334155;
+      }
+      .bg-blueGray-200 {
+        background-color: #e2e8f0;
+      }
+      .checkbox:checked {
+        right: 0;
+        background-color: #4338ca;
+      }
+    </style>
+  </head>
+  <body
+    class="text-gray-800 antialiased"
+    style="font-family: 'Inter', sans-serif"
+  >
+    <nav
+      class="fixed z-50 w-full bg-white top-0 flex flex-wrap items-center justify-between px-2 py-3 shadow-lg"
+    >
+      <div
+        class="container px-4 mx-auto flex flex-wrap items-center justify-between"
+      >
+        <div
+          class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start"
+        >
+          <a
+            class="text-xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-blueGray-700"
+            href="{% url 'index' %}"
+            >TimeBot</a
+          ><button
+            class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+            type="button"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+        <div
+          class="lg:flex flex-grow items-center hidden"
+          id="example-navbar-danger"
+        >
+          <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <li class="nav-item">
+              <a
+                class="download-button px-3 py-2 flex items-center text-base uppercase font-bold text-blueGray-700 hover:text-blueGray-500"
+                href="{% url 'login' %}"
+                ><span class="ml-2">Sign In</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="{% url 'register' %}"
+                class="download-button px-3 py-2 flex items-center text-base uppercase font-bold text-blueGray-700 hover:text-blueGray-500"
+                ><span class="ml-2">Sign Up</span></a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <section
+      class="header relative items-center flex h-screen"
+      style="max-height: 860px"
+    >
+      <div
+        class="container mx-auto items-center flex justify-center text-center flex-wrap"
+      >
+        <div class="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
+          <div class="pt-32 sm:pt-0">
+            <h2 class="font-semibold text-5xl text-blueGray-600">
+              Timesheet Analyzer for Small Businesses
+            </h2>
+            <p class="mt-4 text-lg leading-relaxed text-blueGray-500">
+              Get detailed summaries from your standard timesheet template.
+              Simple select your Karbon timesheet and hit run.
+            </p>
+            <div class="mt-12">
+              <a
+                class="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-purple active:bg-pink-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                href="{% url 'register' %}"
+                >Get started</a
+              ><a
+                href="#"
+                class="github-star ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg"
+                >Learn More</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pb-20 bg-blueGray-200 -mt-24">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap">
+          <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
+            <div
+              class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+            >
+              <div class="px-4 py-10 flex-auto">
+                <div
+                  class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-red-400"
+                >
+                  <i class="fas fa-award"></i>
+                </div>
+                <h6 class="text-xl font-semibold">Simplistic Design</h6>
+                <p class="mt-2 mb-4 text-blueGray-500">
+                  We pride ourselves on making our product extremely easy to
+                  use. Input the necessary file, fill out a couple fields, and
+                  click run. That's it!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
+            <div
+              class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+            >
+              <div class="px-4 py-10 flex-auto">
+                <div
+                  class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-sky-500"
+                >
+                  <i class="fas fa-retweet"></i>
+                </div>
+                <h6 class="text-xl font-semibold">Unlimited Runs</h6>
+                <p class="mt-2 mb-4 text-blueGray-500">
+                  Keep up to date on what is happening within your company.
+                  Analyze your timesheets each day, each week, or each month.
+                  It's totally up to you!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
+            <div
+              class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
+            >
+              <div class="px-4 py-10 flex-auto">
+                <div
+                  class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-emerald-400"
+                >
+                  <i class="fas fa-fingerprint"></i>
+                </div>
+                <h6 class="text-xl font-semibold">Karbon Supported</h6>
+                <p class="mt-2 mb-4 text-blueGray-500">
+                  Our product works with a standard Karbon timesheet. You will
+                  not need to adjust the timesheet at all or change any values!
+                  Simply upload your file and run!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center mt-32">
+          <div class="w-full lg:w-5/12 px-4 mr-auto ml-auto">
+            <h3 class="text-3xl mb-2 font-semibold leading-normal">
+              Beta Version
+            </h3>
+            <p
+              class="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600"
+            >
+              We are currently in our Beta phase. That means we are testing and
+              implementing functionality. For now, it is free to create a
+              standard account, but the Pro version is still in development.
+            </p>
+            <p
+              class="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-600"
+            ></p>
+          </div>
+          <div
+            class="w-full md:mt-4 md:w-8/12 lg:w-4/12 px-4 mr-auto ml-auto cursor-pointer"
+          >
+            <div
+              class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-purple"
+            >
+              <img
+                alt="..."
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1051&amp;q=80"
+                class="w-full align-middle rounded-t-lg"
+              />
+              <blockquote class="relative p-8 mb-4">
+                <svg
+                  preserveAspectRatio="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 583 95"
+                  class="absolute left-0 w-full block"
+                  style="height: 95px; top: -94px"
+                >
+                  <polygon
+                    points="-30,95 583,95 583,65"
+                    class="text-purple fill-current"
+                  ></polygon>
+                </svg>
+                <h4 class="text-xl font-bold text-white">
+                  Download Demo Files
+                </h4>
+                <p class="text-md font-light mt-2 text-white">
+                  To show you exactly what you can expect, we provide a demo
+                  input file and the corresonding output file. This is what the
+                  standard plan will provide.
+                </p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="px-6 xl:px-0">
+      <div class="py-12 px-6 mx-auto container">
+        <div class="flex flex-col lg:items-center justify-center w-full">
+          <h1 class="font-semibold text-gray-800 text-3xl md:text-4xl">
+            The Right Plan for your business
+          </h1>
+          <p class="mt-2.5 lg:w-1/2 lg:text-center text-2xl text-gray-800">
+            We have several plans to showcase your Business. Get everything you
+            need
+          </p>
+        </div>
+        <div class="flex items-center justify-center w-full">
+          <div class="pt-14">
+            <div class="container mx-auto">
+              <div
+                class="flex flex-wrap mb-12 justify-between sm:justify-center -mx-6"
+              >
+                <div
+                  class="w-full xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 mb-4 px-6"
+                >
+                  <div
+                    class="py-5 px-4 bg-white border border-gray-200 rounded-lg text-left"
+                  >
+                    <h2 class="text-2xl text-indigo-700 font-semibold mb-8">
+                      Free
+                    </h2>
+                    <ul class="flex flex-col mb-6">
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          One Free Run
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Summary File Download
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="opacity-0 mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-600 text-base font-normal">
+                          Unlimited Runs
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="opacity-0 mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-600 text-base font-normal">
+                          Dashboard Access
+                        </p>
+                      </li>
+                    </ul>
+                    <p class="text-base text-indigo-700 relative pl-3">
+                      <span class="font-light text-lg"></span>
+                      <span class="text-2xl font-semibold">Free</span>
+                      <span class="font-light text-lg"></span>
+                    </p>
+                    <button
+                      class="mt-5 w-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out rounded text-indigo-700 px-8 py-3 text-base font-semibold py-3"
+                    >
+                      Choose
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="w-full xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 mb-4 px-6"
+                >
+                  <div
+                    class="py-5 px-4 bg-white border border-gray-200 rounded-lg text-left"
+                  >
+                    <h2 class="text-2xl text-indigo-700 font-semibold mb-8">
+                      Standard
+                    </h2>
+                    <ul class="flex flex-col mb-6">
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          24/7 access
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Summary File Download
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Unlimited Runs
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="opacity-0 mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-600 text-base font-normal">
+                          Dashboard Access
+                        </p>
+                      </li>
+                    </ul>
+                    <p class="text-base text-indigo-700 relative pl-3">
+                      <span class="font-light text-lg">$</span>
+                      <span class="text-2xl font-semibold">10</span>
+                      <span class="font-light text-lg">/month</span>
+                    </p>
+                    <button
+                      class="mt-5 w-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out rounded text-indigo-700 px-8 py-3 text-base font-semibold py-3"
+                    >
+                      Choose
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="w-full xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-1/2 mb-4 px-6"
+                >
+                  <div
+                    class="py-5 px-4 bg-white border border-gray-200 rounded-lg text-left"
+                  >
+                    <h2 class="text-2xl text-indigo-700 font-semibold mb-8">
+                      Pro
+                    </h2>
+                    <ul class="flex flex-col mb-6">
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          24/7 access
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Summary File Download
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Unlimited Runs
+                        </p>
+                      </li>
+                      <li class="flex items-center mb-2.5">
+                        <img
+                          src="https://cdn.tuk.dev/assets/templates/weCare/checkMark.png"
+                          class="mr-4"
+                          alt="check-mark"
+                        />
+                        <p class="text-gray-800 text-base font-normal">
+                          Dashboard Access
+                        </p>
+                      </li>
+                    </ul>
+                    <p class="text-base text-indigo-700 relative pl-3">
+                      <span class="font-light text-lg">$</span>
+                      <span class="text-2xl font-semibold">20</span>
+                      <span class="font-light text-lg">/month</span>
+                    </p>
+                    <button
+                      class="mt-5 w-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out rounded text-indigo-700 px-8 py-3 text-base font-semibold py-3"
+                    >
+                      Choose
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script>
+    function toggleNavbar(collapseID) {
+      document.getElementById(collapseID).classList.toggle("hidden");
+      document.getElementById(collapseID).classList.toggle("block");
+    }
+  </script>
+</html>
