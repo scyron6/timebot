@@ -6,12 +6,9 @@ from .client import Client
 from .employee import Employee
 
 
-def read(file):
+def read(file, clients, roles, employees):
     data = pd.read_excel(file, sheet_name=0, usecols=[
         'Date', 'Work', 'Client', 'Team Member', 'Role', 'Task Type', 'Time (Minutes)'])
-    employees = {}
-    clients = {}
-    roles = {}
     for index, row in data.iterrows():
         if row['Team Member'] != 'New Client Queue -1':
 
@@ -44,8 +41,12 @@ def read(file):
     return clients, roles, employees
 
 
-def run(file, start_date, end_date):
-    clients, roles, employees = read(file)
+def run(files, start_date, end_date):
+    clients = {}
+    roles = {}
+    employees = {}
+    for file in files:
+        read(file, clients, roles, employees)
 
     wb = util.write_workbook(clients, roles, employees,
                              start_date, end_date)

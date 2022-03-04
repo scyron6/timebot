@@ -240,12 +240,15 @@
                         id="file"
                         type="file"
                         required
-                        name="excel_timesheet"
+                        multiple
+                        name="excel_timesheets"
                         accept=".xlsx, .xls"
                         style="display: none"
                       />
                     </label>
-                    <p id="file_name">No file selected</p>
+                    <div id="files">
+                      <p id="file_name">No file selected</p>
+                    </div>
                     <button
                       class="mt-4 bg-purple text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
                       style="transition: all 0.15s ease 0s"
@@ -325,8 +328,14 @@
     };
     const file_name = document.getElementById("file_name");
     const file_input = document.getElementById("file");
+    const files = document.getElementById("files");
     file_input.addEventListener("change", () => {
-      file_name.innerHTML = file_input.files[0].name;
+      files.innerHTML = '';
+      Object.entries(file_input.files).forEach(file => {
+        let name = document.createElement('p');
+        name.innerHTML = file[1].name;
+        files.appendChild(name)
+      });
     });
   </script>
 </html>

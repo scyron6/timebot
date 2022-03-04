@@ -17,12 +17,11 @@ def index(request):
 @login_required(login_url='login')
 def dashboard(request):
     if request.method == 'POST':
-        excel_timesheet = request.FILES['excel_timesheet']
+        files = request.FILES.getlist('excel_timesheets')
         start_date = request.POST['start_date']
         end_date = request.POST['end_date']
 
-        wb = bot.run(
-            request.FILES['excel_timesheet'].file, start_date, end_date)
+        wb = bot.run(files, start_date, end_date)
         filename = 'attachment; filename="Timesheet Summary ' + \
             start_date + ' - ' + end_date + '.xls"'
         response = HttpResponse(save_virtual_workbook(
