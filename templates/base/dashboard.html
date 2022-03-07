@@ -260,6 +260,57 @@
               </div>
             </div>
           </div>
+          {% if work_entries_by_client %}
+            <p>Clients</p>
+            <table>
+            <tr>
+              <th>Client</th>
+              <th>Time (Minutes)</th>
+            </tr>
+            {% for entry in work_entries_by_client %}
+            <tr>
+              <td>{{ entry.client }}</td>
+              <td>{{ entry.total_time }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+          {% else %}
+            <p>No Clients</p>
+          {% endif %}
+          {% if work_entries_by_employee %}
+            <p>Employees</p>
+            <table>
+            <tr>
+              <th>Employees</th>
+              <th>Time (Minutes)</th>
+            </tr>
+            {% for entry in work_entries_by_employee %}
+            <tr>
+              <td>{{ entry.employee }}</td>
+              <td>{{ entry.total_time }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+          {% else %}
+            <p>No Employees</p>
+          {% endif %}
+          {% if work_entries_by_role %}
+            <p>Roles</p>
+            <table>
+            <tr>
+              <th>Roles</th>
+              <th>Time (Minutes)</th>
+            </tr>
+            {% for entry in work_entries_by_role %}
+            <tr>
+              <td>{{ entry.role }}</td>
+              <td>{{ entry.total_time }}</td>
+            </tr>
+            {% endfor %}
+            </table>
+          {% else %}
+            <p>No Roles</p>
+          {% endif %}
         </div>
       </div>
   </body>

@@ -5,9 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
+from django.db.models import Sum
+
 from openpyxl import load_workbook
 from openpyxl.writer.excel import save_virtual_workbook
 from .bot import bot
+from .models import Work
 
 
 def index(request):
@@ -31,7 +34,16 @@ def dashboard(request):
         })
 
         return response
-    return render(request, 'base/dashboard.html')
+    
+    work_entries_by_client = Work.objects.filter(user=request.user).values('client').order_by('client').annotate(total_time=Sum('minutes'))
+    work_entries_by_employee = Work.objects.filter(user=request.user).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
+    work_entries_by_role = Work.objects.filter(user=request.user).values('role').order_by('role').annotate(total_time=Sum('minutes'))
+    context = {
+        'work_entries_by_client': work_entries_by_client,
+        'work_entries_by_employee': work_entries_by_employee,
+        'work_entries_by_role': work_entries_by_role
+    }
+    return render(request, 'base/dashboard.html', context)
 
 
 @login_required(login_url='login')

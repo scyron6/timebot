@@ -1,11 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Work(models.Model):
-    employee = models.CharField(max_length=100)
-    client = models.CharField(max_length=100)
-    minutes = models.IntegerField()
-    date = models.DateField()
-    work = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    task = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    employee = models.CharField(max_length=100, blank=True)
+    client = models.CharField(max_length=100, blank=True)
+    minutes = models.IntegerField(blank=True)
+    date = models.DateField(blank=True)
+    work = models.CharField(max_length=100, blank=True)
+    role = models.CharField(max_length=100, blank=True)
+    task = models.CharField(max_length=100, blank=True)
