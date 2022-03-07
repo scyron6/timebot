@@ -4,6 +4,7 @@ from openpyxl import Workbook
 from . import util
 from .client import Client
 from .employee import Employee
+from base.models import Work
 
 
 def read(file, clients, roles, employees):
@@ -11,6 +12,12 @@ def read(file, clients, roles, employees):
         'Date', 'Work', 'Client', 'Team Member', 'Role', 'Task Type', 'Time (Minutes)'])
     for index, row in data.iterrows():
         if row['Team Member'] != 'New Client Queue -1':
+            work_label = ""
+            if row['Work'] == "":
+                work_label = "Unlabeled Work"
+            else:
+                work_label = row['Work']
+            Work.objects.create(employee=row["Team Member"], client=row["Client"], minutes=row["Time (Minutes)"], date=row["Date"], work=work_label,role=row["Role"], task=row['Task Type'] )
 
             if row['Client'] in clients:
                 clients[row['Client']].add_minutes(
