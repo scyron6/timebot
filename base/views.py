@@ -35,15 +35,23 @@ def dashboard(request):
 
         return response
     
-    work_entries_by_client = Work.objects.filter(user=request.user).values('client').order_by('client').annotate(total_time=Sum('minutes'))
+    total_clients = Work.objects.filter(user=request.user).values('client').distinct().count()
+    total_minutes = Work.objects.filter(user=request.user).aggregate(Sum('minutes'))
+    total_employees = Work.objects.filter(user=request.user).values('employee').distinct().count()
+    total_roles = Work.objects.filter(user=request.user).values('role').distinct().count()
+    work_entries_by_client = Work.objects.filter(user=request.user).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     work_entries_by_employee = Work.objects.filter(user=request.user).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
-    work_entries_by_role = Work.objects.filter(user=request.user).values('role').order_by('role').annotate(total_time=Sum('minutes'))
+    work_entries_by_role = Work.objects.filter(user=request.user).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     context = {
+        'total_clients': total_clients,
+        'total_minutes': total_minutes,
+        'total_employees': total_employees,
+        'total_roles': total_roles,
         'work_entries_by_client': work_entries_by_client,
         'work_entries_by_employee': work_entries_by_employee,
         'work_entries_by_role': work_entries_by_role
     }
-    return render(request, 'base/dashboard.html', context)
+    return render(request, 'base/dashboard2.html', context)
 
 
 @login_required(login_url='login')
