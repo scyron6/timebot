@@ -7,10 +7,10 @@ from django.contrib.auth.models import User
 
 from django.db.models import Sum
 
-from openpyxl import load_workbook
+from datetime import date, datetime
 from openpyxl.writer.excel import save_virtual_workbook
 from .bot import bot
-from .models import Work
+from .models import Work, Timesheet
 
 
 def index(request):
@@ -19,29 +19,22 @@ def index(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    if request.method == 'POST':
-        files = request.FILES.getlist('excel_timesheets')
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
-
-        wb = bot.run(files, start_date, end_date)
-        filename = 'attachment; filename="Timesheet Summary ' + \
-            start_date + ' - ' + end_date + '.xls"'
-        response = HttpResponse(save_virtual_workbook(
-            wb), headers={
-                'Content_Type': 'application/vnd.ms-excel',
-                'Content-Disposition': filename,
-        })
-
-        return response
     
-    total_clients = Work.objects.filter(user=request.user).values('client').distinct().count()
-    total_minutes = Work.objects.filter(user=request.user).aggregate(Sum('minutes'))
-    total_employees = Work.objects.filter(user=request.user).values('employee').distinct().count()
-    total_roles = Work.objects.filter(user=request.user).values('role').distinct().count()
-    work_entries_by_client = Work.objects.filter(user=request.user).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
-    work_entries_by_employee = Work.objects.filter(user=request.user).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
-    work_entries_by_role = Work.objects.filter(user=request.user).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    start_date = date.today().replace(day=1)
+    end_date = date.today()
+    if 'start_date' in request.GET:
+        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
+    
+    if 'end_date' in request.GET:
+        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
+    
+    total_clients = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').distinct().count()
+    total_minutes = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).aggregate(Sum('minutes'))
+    total_employees = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').distinct().count()
+    total_roles = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').distinct().count()
+    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
+    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     context = {
         'total_clients': total_clients,
         'total_minutes': total_minutes,
@@ -49,25 +42,100 @@ def dashboard(request):
         'total_roles': total_roles,
         'work_entries_by_client': work_entries_by_client,
         'work_entries_by_employee': work_entries_by_employee,
-        'work_entries_by_role': work_entries_by_role
+        'work_entries_by_role': work_entries_by_role,
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
     }
-    return render(request, 'base/dashboard2.html', context)
+    return render(request, 'base/dashboard.html', context)
 
 
 @login_required(login_url='login')
 def clients(request):
-    return render(request, 'base/clients.html')
+    start_date = date.today().replace(day=1)
+    end_date = date.today()
+    if 'start_date' in request.GET:
+        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
+    
+    if 'end_date' in request.GET:
+        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
+    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').annotate(total_time=Sum('minutes')).order_by('client')
+    context = {
+        'work_entries_by_client': work_entries_by_client,
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
+    }
+    return render(request, 'base/clients.html', context)
 
 
 @login_required(login_url='login')
 def employees(request):
-    return render(request, 'base/employees.html')
+    start_date = date.today().replace(day=1)
+    end_date = date.today()
+    if 'start_date' in request.GET:
+        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
+    
+    if 'end_date' in request.GET:
+        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
+    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').annotate(total_time=Sum('minutes')).order_by('employee')
+    context = {
+        'work_entries_by_employee': work_entries_by_employee,
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
+    }
+    return render(request, 'base/employees.html', context)
 
 
 @login_required(login_url='login')
 def roles(request):
-    return render(request, 'base/roles.html')
+    start_date = date.today().replace(day=1)
+    end_date = date.today()
+    if 'start_date' in request.GET:
+        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
+    
+    if 'end_date' in request.GET:
+        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
+    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').annotate(total_time=Sum('minutes')).order_by('role')
+    context = {
+        'work_entries_by_role': work_entries_by_role,
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
+    }
+    return render(request, 'base/roles.html', context)
 
+@login_required(login_url='login')
+def timesheets(request):
+    if request.method == 'POST':
+        files = request.FILES.getlist('excel_timesheets')
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        # download = False
+        # if 'download' in request.POST:
+        #     download = True
+        
+        file_name = ""
+        for file in files:
+            file_name += file.name + ','
+        timesheet = Timesheet.objects.create(file_name = file_name, user=request.user, start_date=start_date, end_date=end_date, submission_date=date.today())
+        wb = bot.run(files, start_date, end_date, request.user, timesheet)
+
+        # if download:
+        #     filename = 'attachment; filename="Timesheet Summary ' + \
+        #         start_date + ' - ' + end_date + '.xls"'
+        #     response = HttpResponse(save_virtual_workbook(
+        #         wb), headers={
+        #             'Content_Type': 'application/vnd.ms-excel',
+        #             'Content-Disposition': filename,
+        #     })
+
+        #     return response
+        # else:
+        return redirect('timesheets')
+
+    timesheets = Timesheet.objects.filter(user=request.user).values('file_name', 'start_date', 'end_date', 'submission_date', 'pk').order_by('start_date')
+    context = {
+        'timesheets': timesheets
+    }
+    return render(request, 'base/timesheets.html', context)
 
 @login_required(login_url='login')
 def my_profile(request):

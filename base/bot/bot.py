@@ -7,7 +7,7 @@ from .employee import Employee
 from base.models import Work
 
 
-def read(file, clients, roles, employees):
+def read(file, clients, roles, employees, user, timesheet):
     data = pd.read_excel(file, sheet_name=0, usecols=[
         'Date', 'Work', 'Client', 'Team Member', 'Role', 'Task Type', 'Time (Minutes)'])
     for index, row in data.iterrows():
@@ -17,7 +17,7 @@ def read(file, clients, roles, employees):
                 work_label = "Unlabeled Work"
             else:
                 work_label = row['Work']
-            Work.objects.create(employee=row["Team Member"], client=row["Client"], minutes=row["Time (Minutes)"], date=row["Date"], work=work_label,role=row["Role"], task=row['Task Type'] )
+            Work.objects.create(timesheet=timesheet, user=user, employee=row["Team Member"], client=row["Client"], minutes=row["Time (Minutes)"], date=row["Date"], work=work_label,role=row["Role"], task=row['Task Type'] )
 
             if row['Client'] in clients:
                 clients[row['Client']].add_minutes(
@@ -48,12 +48,12 @@ def read(file, clients, roles, employees):
     return clients, roles, employees
 
 
-def run(files, start_date, end_date):
+def run(files, start_date, end_date, user, timesheet):
     clients = {}
     roles = {}
     employees = {}
     for file in files:
-        read(file, clients, roles, employees)
+        read(file, clients, roles, employees, user, timesheet)
 
     wb = util.write_workbook(clients, roles, employees,
                              start_date, end_date)
