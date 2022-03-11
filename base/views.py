@@ -22,15 +22,6 @@ def dashboard(request):
 
     getSessionDates(request)
     
-    print(request.session['start_date'])
-    # start_date = date.today().replace(day=1)
-    # end_date = date.today()
-    # if 'start_date' in request.GET:
-    #     start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
-    
-    # if 'end_date' in request.GET:
-    #     end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
-    
     total_clients = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').distinct().count()
     total_minutes = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).aggregate(Sum('minutes'))
     total_employees = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').distinct().count()
@@ -100,9 +91,9 @@ def employee(request):
 
     getSessionDates(request)
 
-    time_by_client = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('client').annotate(total_time=Sum('minutes')).order_by('client')
-    time_by_task = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('task').annotate(total_time=Sum('minutes')).order_by('task')
-    time_by_role = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('role').annotate(total_time=Sum('minutes')).order_by('role')
+    time_by_client = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('client')
+    time_by_task = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('task').annotate(total_time=Sum('minutes')).order_by('task')
+    time_by_role = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').annotate(total_time=Sum('minutes')).order_by('role')
 
     context = {
         'employee_name': employee_name,
@@ -135,7 +126,7 @@ def role(request):
     
     getSessionDates(request)
 
-    work_entries_for_role = Work.objects.filter(user=request.user).filter(role=role_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('employee', 'minutes', 'date').order_by('date')
+    work_entries_for_role = Work.objects.filter(user=request.user).filter(role=role_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee', 'minutes', 'date').order_by('date')
 
     context = {
         'role_name': role_name,
@@ -180,6 +171,36 @@ def timesheets(request):
         'timesheets': timesheets
     }
     return render(request, 'base/timesheets.html', context)
+
+@login_required(login_url='login')
+def timesheet(request, pk):
+    timesheet = Timesheet.objects.get(pk=pk)
+
+    if (request.user != timesheet.user):
+        return HttpResponse("You aren't allowed here")
+
+    timesheet_entries = Work.objects.filter(user=request.user).filter(timesheet=pk).values('date', 'work', 'client', 'employee', 'role', 'task', 'minutes')
+    context = {
+        'timesheet_pk': timesheet.pk,
+        'timesheet_filename': timesheet.file_name,
+        'timesheet_start_date': timesheet.start_date,
+        'timesheet_end_date': timesheet.end_date,
+        'timesheet_entries': timesheet_entries
+    }
+    return render(request, 'base/timesheet.html', context)
+
+@login_required(login_url='login')
+def delete_timesheet(request, pk):
+    timesheet = Timesheet.objects.get(pk=pk)
+
+    if (request.user != timesheet.user):
+        return HttpResponse("You aren't allowed here")
+    
+    if request.method == 'POST':
+        timesheet.delete()
+        return redirect('timesheets')
+
+    return render(request, 'base/delete_timesheet.html')
 
 @login_required(login_url='login')
 def my_profile(request):

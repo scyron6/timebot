@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"
@@ -18,7 +17,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/creativetimofficial/tailwind-starter-kit/compiled-tailwind.min.css"
     />
-    <title>Timesheets | TimeBot</title>
+    <title>Timesheet | TimeBot</title>
     <style>
       .bg-purple {
         background-color: #5d5dff;
@@ -49,7 +48,7 @@
     class="text-blueGray-700 antialiased"
     style="font-family: 'Inter', sans-serif"
   >
-    <div id="input-timesheet" class="modal">
+    <div id="delete-timesheet" class="modal">
       <div
         class="modal-content flex flex-col justify-center items-center text-center min-w-0 break-words mb-6 shadow-lg rounded bg-white text-blueGray-500"
         style="height: 450px"
@@ -59,67 +58,32 @@
             <div class="relative w-6/8 max-w-full flex-grow flex-1">
               <div class="rounded-t mb-0 px-6 py-6">
                 <div class="text-center mb-3">
-                  <h6 class="text-gray-600 text-xl font-bold">
-                    Enter New Timesheet
-                  </h6>
+                  <h6 class="text-gray-600 text-xl font-bold">Delete</h6>
                 </div>
                 <hr class="mt-6 border-b-1 border-gray-400" />
               </div>
               <form
                 method="post"
-                id="timesheet-form"
-                enctype="multipart/form-data"
-                action="{% url 'timesheets' %}"
+                id="delete-form"
+                action="{% url 'delete_timesheet' timesheet_pk%}"
               >
                 {% csrf_token %}
-                <label class="block mb-3">Select Dates</label>
-                <input
-                  class="mx-auto border-2 p-[4px]"
-                  type="date"
-                  required
-                  name="start_date"
-                />
-                <span class="mx-4">to</span>
-                <input
-                  class="mx-auto border-2 p-[4px]"
-                  type="date"
-                  required
-                  name="end_date"
-                />
-                <label
-                  class="block my-4 mx-auto rounded py-2 cursor-pointer text-sm font-bold"
-                  style="width: 30%; border: 2px solid"
+                <label class="block mb-3"
+                  >Deleting this timesheet will delete all entries on the
+                  timesheet. Are you sure you want to delete?</label
                 >
-                  Choose File
-                  <input
-                    id="file"
-                    type="file"
-                    required
-                    multiple
-                    name="excel_timesheets"
-                    accept=".xlsx, .xls"
-                    style="display: none"
-                  />
-                </label>
-                <div id="files">
-                  <p id="file_name">No file selected</p>
-                </div>
-                <div class="py-2">
-                  <input name="download" type="checkbox" value="true" />
-                  <label class="pl-2">Download Summary Excel File?</label>
-                </div>
                 <div class="flex flex-row">
                   <button
-                    class="mt-4 bg-purple text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
+                    class="mt-4 bg-red-600 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
                     style="transition: all 0.15s ease 0s"
                   >
-                    Run
+                    Delete
                   </button>
                   <button
                     class="mt-4 bg-gray-700 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
-                    style="transition: all 0.15s ease 0s"
                     type="button"
-                    onclick="document.getElementById('input-timesheet').style.display='none'"
+                    style="transition: all 0.15s ease 0s"
+                    onclick="document.getElementById('delete-timesheet').style.display='none'"
                   >
                     Cancel
                   </button>
@@ -263,13 +227,20 @@
           class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4"
         >
           <div
-            class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4 py-2"
+            class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
           >
             <a
               class="text-white text-sm uppercase hidden lg:inline-block font-semibold"
               href="#"
-              >Timesheets</a
+              >{{ timesheet_filename }}</a
             >
+            <button
+              class="text-white bg-red-600 px-4 py-2"
+              type="button"
+              onclick="document.getElementById('delete-timesheet').style.display='block'"
+            >
+              Delete Timesheet
+            </button>
           </div>
         </nav>
         <!-- Header -->
@@ -286,20 +257,8 @@
                       class="relative w-full px-4 max-w-full flex-grow flex-1"
                     >
                       <h3 class="font-semibold text-base text-blueGray-700">
-                        Timesheets
+                        Work Entries ({{ timesheet_start_date }} - {{ timesheet_end_date }})
                       </h3>
-                    </div>
-                    <div
-                      class="relative w-full px-4 max-w-full flex-grow flex-1 text-right"
-                    >
-                      <button
-                        class="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-                        type="button"
-                        style="transition: all 0.15s ease"
-                        onclick="document.getElementById('input-timesheet').style.display='block'"
-                      >
-                        Add New
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -313,50 +272,67 @@
                         <th
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                         >
-                          Files
+                          Date
                         </th>
                         <th
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                         >
-                          Start Date
+                          Work
                         </th>
                         <th
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                         >
-                          End Date
+                          Client
                         </th>
                         <th
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                         >
-                          Entry Date
+                          Employee
+                        </th>
+                        <th
+                          class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                        >
+                          Role
+                        </th>
+                        <th
+                          class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                        >
+                          Task
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {% for timesheet in timesheets %}
-                      <tr
-                        onclick="window.location.href='{% url 'timesheet' timesheet.pk %}'"
-                        class="cursor-pointer"
-                      >
-                        <th
-                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-                        >
-                          {{ timesheet.file_name }}
-                        </th>
+                      {% for entry in timesheet_entries %}
+                      <tr>
                         <td
-                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         >
-                          {{ timesheet.start_date }}
+                          {{ entry.date }}
                         </td>
                         <td
                           class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         >
-                          {{ timesheet.end_date }}
+                          {{ entry.work }}
                         </td>
                         <td
                           class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
                         >
-                          {{ timesheet.submission_date }}
+                          {{ entry.client }}
+                        </td>
+                        <td
+                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+                        >
+                          {{ entry.employee }}
+                        </td>
+                        <td
+                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                        >
+                          {{ entry.role }}
+                        </td>
+                        <td
+                          class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                        >
+                          {{ entry.task }}
                         </td>
                       </tr>
                       {% endfor %}
@@ -376,7 +352,7 @@
                   <div class="text-sm text-blueGray-500 font-semibold py-1">
                     Copyright © <span id="javascript-date"></span>
                     <a
-                      href="#"
+                      href="https://www.creative-tim.com"
                       class="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
                     >
                       TimeBot
@@ -422,17 +398,26 @@
         document.getElementById(dropdownID).classList.toggle("hidden");
         document.getElementById(dropdownID).classList.toggle("block");
       }
+    </script>
+    <script>
+      const start = document.getElementById("start_date");
+      const end = document.getElementById("end_date");
 
-      const file_name = document.getElementById("file_name");
-      const file_input = document.getElementById("file");
-      const files = document.getElementById("files");
-      file_input.addEventListener("change", () => {
-        files.innerHTML = "";
-        Object.entries(file_input.files).forEach((file) => {
-          let name = document.createElement("p");
-          name.innerHTML = file[1].name;
-          files.appendChild(name);
-        });
+      start.addEventListener("change", () => {
+        window.location.replace(
+          "?client_name={{ client_name }}&start_date=" +
+            start.value +
+            "&end_date=" +
+            end.value
+        );
+      });
+      end.addEventListener("change", () => {
+        window.location.replace(
+          "?client_name={{ client_name }}&start_date=" +
+            start.value +
+            "&end_date=" +
+            end.value
+        );
       });
     </script>
   </body>

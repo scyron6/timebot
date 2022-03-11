@@ -17,4 +17,6 @@ urlpatterns = [
     path('dashboard/role/', views.role, name='role'),
     path('dashboard/my_profile/', views.my_profile, name='my_profile'),
     path('dashboard/timesheets/', views.timesheets, name='timesheets'),
+    path('dashboard/timesheet/<str:pk>', views.timesheet, name='timesheet'),
+    path('dashboard/timesheet/delete/<str:pk>', views.delete_timesheet, name='delete_timesheet'),
 ]
