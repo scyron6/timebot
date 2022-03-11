@@ -1,5 +1,6 @@
 import pandas as pd
 from openpyxl import Workbook
+import math
 
 from . import util
 from .client import Client
@@ -13,7 +14,7 @@ def read(file, clients, roles, employees, user, timesheet):
     for index, row in data.iterrows():
         if row['Team Member'] != 'New Client Queue -1':
             work_label = ""
-            if row['Work'] == "":
+            if isinstance(row['Work'], float):
                 work_label = "Unlabeled Work"
             else:
                 work_label = row['Work']

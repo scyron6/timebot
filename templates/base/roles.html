@@ -232,7 +232,10 @@
                     </thead>
                     <tbody>
                       {% for entry in work_entries_by_role %}
-                      <tr>
+                      <tr
+                        onclick="window.location.href='{% url 'role' %}?role_name={{ entry.role }}'"
+                        class="cursor-pointer"
+                      >
                         <th
                           class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
                         >

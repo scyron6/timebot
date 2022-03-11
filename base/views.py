@@ -19,22 +19,25 @@ def index(request):
 
 @login_required(login_url='login')
 def dashboard(request):
+
+    getSessionDates(request)
     
-    start_date = date.today().replace(day=1)
-    end_date = date.today()
-    if 'start_date' in request.GET:
-        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
+    print(request.session['start_date'])
+    # start_date = date.today().replace(day=1)
+    # end_date = date.today()
+    # if 'start_date' in request.GET:
+    #     start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
     
-    if 'end_date' in request.GET:
-        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
+    # if 'end_date' in request.GET:
+    #     end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
     
-    total_clients = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').distinct().count()
-    total_minutes = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).aggregate(Sum('minutes'))
-    total_employees = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').distinct().count()
-    total_roles = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').distinct().count()
-    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
-    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
-    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    total_clients = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').distinct().count()
+    total_minutes = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).aggregate(Sum('minutes'))
+    total_employees = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').distinct().count()
+    total_roles = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').distinct().count()
+    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
+    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     context = {
         'total_clients': total_clients,
         'total_minutes': total_minutes,
@@ -43,64 +46,105 @@ def dashboard(request):
         'work_entries_by_client': work_entries_by_client,
         'work_entries_by_employee': work_entries_by_employee,
         'work_entries_by_role': work_entries_by_role,
-        'start_date': start_date.strftime('%Y-%m-%d'),
-        'end_date': end_date.strftime('%Y-%m-%d'),
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date']
     }
     return render(request, 'base/dashboard.html', context)
 
 
 @login_required(login_url='login')
 def clients(request):
-    start_date = date.today().replace(day=1)
-    end_date = date.today()
-    if 'start_date' in request.GET:
-        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
-    
-    if 'end_date' in request.GET:
-        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
-    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('client').annotate(total_time=Sum('minutes')).order_by('client')
+    getSessionDates(request)
+    work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('client')
     context = {
         'work_entries_by_client': work_entries_by_client,
-        'start_date': start_date.strftime('%Y-%m-%d'),
-        'end_date': end_date.strftime('%Y-%m-%d'),
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
     }
     return render(request, 'base/clients.html', context)
+
+@login_required(login_url='login')
+def client(request):
+    client_name = ""
+    if 'client_name' in request.GET:
+        client_name = request.GET['client_name']
+    getSessionDates(request)
+
+    work_entries_for_client = Work.objects.filter(user=request.user).filter(client=client_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('employee', 'work', 'minutes', 'date').order_by('date')
+
+    context = {
+        'client_name': client_name,
+        'work_entries_for_client': work_entries_for_client,
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
+    }
+    return render(request, 'base/client.html', context)
 
 
 @login_required(login_url='login')
 def employees(request):
-    start_date = date.today().replace(day=1)
-    end_date = date.today()
-    if 'start_date' in request.GET:
-        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
-    
-    if 'end_date' in request.GET:
-        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
-    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('employee').annotate(total_time=Sum('minutes')).order_by('employee')
+    getSessionDates(request)
+    work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').annotate(total_time=Sum('minutes')).order_by('employee')
     context = {
         'work_entries_by_employee': work_entries_by_employee,
-        'start_date': start_date.strftime('%Y-%m-%d'),
-        'end_date': end_date.strftime('%Y-%m-%d'),
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
     }
     return render(request, 'base/employees.html', context)
+
+@login_required(login_url='login')
+def employee(request):
+    employee_name = ""
+    if 'employee_name' in request.GET:
+        employee_name = request.GET['employee_name']
+
+    getSessionDates(request)
+
+    time_by_client = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('client').annotate(total_time=Sum('minutes')).order_by('client')
+    time_by_task = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('task').annotate(total_time=Sum('minutes')).order_by('task')
+    time_by_role = Work.objects.filter(user=request.user).filter(employee=employee_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('role').annotate(total_time=Sum('minutes')).order_by('role')
+
+    context = {
+        'employee_name': employee_name,
+        'time_by_client': time_by_client,
+        'time_by_task': time_by_task,
+        'time_by_role': time_by_role,
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
+    }
+    return render(request, 'base/employee.html', context)
 
 
 @login_required(login_url='login')
 def roles(request):
-    start_date = date.today().replace(day=1)
-    end_date = date.today()
-    if 'start_date' in request.GET:
-        start_date = datetime.strptime(request.GET['start_date'], "%Y-%m-%d")
-    
-    if 'end_date' in request.GET:
-        end_date = datetime.strptime(request.GET['end_date'], "%Y-%m-%d")
-    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[start_date,end_date]).values('role').annotate(total_time=Sum('minutes')).order_by('role')
+    getSessionDates(request)
+
+    work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').annotate(total_time=Sum('minutes')).order_by('role')
     context = {
         'work_entries_by_role': work_entries_by_role,
-        'start_date': start_date.strftime('%Y-%m-%d'),
-        'end_date': end_date.strftime('%Y-%m-%d'),
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
     }
     return render(request, 'base/roles.html', context)
+
+@login_required(login_url='login')
+def role(request):
+    role_name = ""
+    if 'role_name' in request.GET:
+        role_name = request.GET['role_name']
+    
+    getSessionDates(request)
+
+    work_entries_for_role = Work.objects.filter(user=request.user).filter(role=role_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('employee', 'minutes', 'date').order_by('date')
+
+    context = {
+        'role_name': role_name,
+        'work_entries_for_role': work_entries_for_role,
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
+    }
+    return render(request, 'base/role.html', context)
+
 
 @login_required(login_url='login')
 def timesheets(request):
@@ -211,3 +255,16 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('index')
+
+def getSessionDates(request):
+    if not request.session.get('start_date'):
+        request.session['start_date'] = datetime.strftime(date.today().replace(day=1), "%Y-%m-%d")
+
+    if not request.session.get('end_date'):
+        request.session['end_date'] = datetime.strftime(date.today(), "%Y-%m-%d")
+
+    if 'start_date' in request.GET:
+        request.session['start_date'] = request.GET['start_date']
+    
+    if 'end_date' in request.GET:
+        request.session['end_date'] = request.GET['end_date']
