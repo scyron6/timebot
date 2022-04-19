@@ -1,305 +1,116 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Dashboard - TimeBot</title>
-    <style>
-      .bg-purple {
-        background-color: #5d5dff;
-      }
-      .text-purple {
-        color: #5d5dff;
-      }
-      .bg-gray {
-          background-color: #f2f2f2;
-      }
-    </style>
-  </head>
+  {% include 'head.html' %}
   <body
-    class="text-gray-800 antialiased bg-gray"
+    class="text-blueGray-700 antialiased"
     style="font-family: 'Inter', sans-serif"
   >
-    <div class="h-full w-full absolute bg-gray">
-      <!-- Navigation starts -->
-      <!-- Mobile -->
-      <div id="mobile-nav" class="w-full xl:hidden min-h-full absolute z-40">
-        <div
-          class="bg-gray-800 opacity-50 inset-0 fixed w-full min-h-full"
-          onclick="sidebarHandler(false)"
-        ></div>
-        <div
-          class="w-64 z-20 absolute left-0 z-40 top-0 bg-white shadow flex-col justify-between transition duration-150 ease-in-out min-h-full"
+    {% include 'base/input_timesheet_modal.html' %}
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      {% include 'sidebar.html' %}
+      <div class="relative md:ml-64 bg-blueGray-50">
+        <nav
+          class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4"
         >
-          <div class="flex flex-col justify-between min-h-full">
-            <div class="px-6 pt-4 overflow-y-auto">
-              <div class="flex items-center justify-between">
-                <div aria-label="Home" role="img" class="flex items-center">
-                  <p class="text-bold md:text-2xl text-base pl-3 text-gray-800">TimeBot</p>
-                </div>
-                <button
-                  id="cross"
-                  class="hidden text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 rounded"
-                  onclick="sidebarHandler(false)"
-                >
-                  <img
-                    src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_Grey_background-svg2.svg"
-                    alt="cross"
-                  />
-                </button>
-              </div>
-              <ul class="f-m-m">
-                <li class="text-white pt-8">
-                  <div class="flex items-center">
-                    <a
-                      href="{% url 'dashboard' %}"
-                      class="text-gray-800 ml-3 text-lg"
-                      >Dashboard</a
-                    >
-                  </div>
-                </li>
-                <li class="text-gray-700 pt-8">
-                  <div class="flex items-center">
-                    <div class="flex items-center">
-                      <a
-                        href="{% url 'clients' %}"
-                        class="text-gray-800 ml-3 text-lg"
-                        >Clients</a
-                      >
-                    </div>
-                  </div>
-                </li>
-                <li class="text-gray-800 pt-8">
-                  <div class="flex items-center">
-                    <a
-                      href="{% url 'employees' %}"
-                      class="text-gray-800 ml-3 text-lg"
-                      >Employees</a
-                    >
-                  </div>
-                </li>
-                <li class="text-gray-800 pt-8">
-                  <div class="flex items-center">
-                    <a
-                      href="{% url 'roles' %}"
-                      class="text-gray-800 ml-3 text-lg"
-                      >Roles</a
-                    >
-                  </div>
-                </li>
-                <li class="text-gray-800 pt-8">
-                  <div class="flex items-center">
-                    <a
-                      href="{% url 'my_profile' %}"
-                      class="text-indigo-500 ml-3 text-lg"
-                      >My Profile</a
-                    >
-                  </div>
-                </li>
-                <li class="text-gray-800 pt-8">
-                  <div class="flex items-center">
-                    <div class="flex items-center">
-                      <a
-                        href="{% url 'logout' %}"
-                        class="text-gray-800 ml-3 text-lg"
-                        >Log Out</a
-                      >
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Mobile -->
-      <nav class="w-full mx-auto bg-white shadow">
-        <div
-          class="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto"
-        >
-          <div class="h-full flex items-center">
-            <div aria-label="Home" role="img" class="mr-10 flex items-center">
-              <h3
-                class="text-xl text-gray-800 font-bold tracking-normal leading-tight ml-3 block"
-              >
-                TimeBot
-              </h3>
-            </div>
-            <ul class="pr-12 xl:flex items-center h-full hidden">
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-gray-800 tracking-normal"
-              >
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-              </li>
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-gray-800 mx-10 tracking-normal"
-              >
-                <a href="{% url 'clients' %}">Clients</a>
-              </li>
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-gray-800 mr-10 tracking-normal"
-              >
-                <a href="{% url 'employees' %}">Employees</a>
-              </li>
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-gray-800 mr-10 tracking-normal"
-              >
-                <a href="{% url 'roles' %}">Roles</a>
-              </li>
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-indigo-700 mr-10 tracking-normal border-b-2 border-indigo-700"
-              >
-                <a href="{% url 'my_profile' %}">My Profile</a>
-              </li>
-              <li
-                class="hover:text-indigo-700 cursor-pointer h-full flex items-center text-sm text-gray-800 tracking-normal"
-              >
-                <a href="{% url 'logout' %}">Log Out</a>
-              </li>
-            </ul>
-          </div>
-          <div class="visible xl:hidden flex items-center">
-            <div>
-              <button
-                id="menu"
-                class="text-gray-800 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
-                onclick="sidebarHandler(true) "
-              >
-                <img
-                  src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_Grey_background-svg7.svg"
-                  alt="toggler"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <!-- Navigation ends -->
-      <!-- Page title starts -->
-      <div
-        class="my-6 lg:my-12 container px-6 mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between pb-4 border-b border-gray-300"
-      >
-        <div>
-          <h4 class="text-2xl font-bold leading-tight text-gray-800">My Profile</h4>
-        </div>
-      </div>
-      <div class="container mx-auto px-6 pb-[42px]">
-      <main>
           <div
-            tabindex="0"
-            aria-label="form"
-            class="focus:outline-none w-full bg-white p-10"
-          >
-            <div class="mt-12 md:flex items-center">
-              <div class="flex flex-col">
-                <label class="mb-3 text-sm leading-none text-gray-800"
-                  >Email Address</label
-                >
-                <input
-                  type="email"
-                  tabindex="0"
-                  aria-label="Enter email Address"
-                  class="focus:outline-none focus:ring-2 focus:ring-indigo-400 w-64 bg-gray-100 text-sm font-medium leading-none text-gray-800 p-3 border rounded border-gray-200"
-                  value="{{user.email}}"
-                />
-              </div>
-              <div class="flex flex-col md:ml-12 md:mt-0 mt-8">
-                <label class="mb-3 text-sm leading-none text-gray-800"
-                  >Membership Type</label
-                >
-                <input
-                  type="text"
-                  tabindex="0"
-                  aria-label="plan"
-                  class="focus:outline-none focus:ring-2 focus:ring-indigo-400 w-64 bg-gray-100 text-sm font-medium leading-none text-gray-800 p-3 border rounded border-gray-200"
-                  value="Standard"
-                />
+            class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
+          ></div>
+        </nav>
+        <!-- Header -->
+        <div class="relative bg-purple md:pt-10 pb-32 pt-8"></div>
+        <div class="px-4 md:px-10 mx-auto w-full -m-24">
+          <div class="flex flex-wrap mt-4">
+            <div class="w-full mb-12 xl:mb-0 px-4">
+              <div
+                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+              >
+                <div class="rounded-t mb-0 px-4 py-3 border-0">
+                  <div class="flex flex-wrap items-center">
+                    <div
+                      class="relative w-full px-4 max-w-full flex flex-col justify-center items-center"
+                    >
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px] underline"
+                      >
+                        Your Profile
+                      </h3>
+                      <p>{{user.email}}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </main>
+          <footer class="block py-4">
+            <div class="container mx-auto px-4">
+              <hr class="mb-4 border-b-1 border-blueGray-200" />
+              <div
+                class="flex flex-wrap items-center md:justify-between justify-center"
+              >
+                <div class="w-full md:w-4/12 px-4">
+                  <div class="text-sm text-blueGray-500 font-semibold py-1">
+                    Copyright © <span id="javascript-date"></span>
+                    <a
+                      href="https://www.creative-tim.com"
+                      class="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
+                    >
+                      TimeBot
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
       </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+      charset="utf-8"
+    ></script>
+    <script type="text/javascript">
+      /* Sidebar - Side navigation menu on mobile/responsive mode */
+      function toggleNavbar(collapseID) {
+        document.getElementById(collapseID).classList.toggle('hidden');
+        document.getElementById(collapseID).classList.toggle('bg-white');
+        document.getElementById(collapseID).classList.toggle('m-2');
+        document.getElementById(collapseID).classList.toggle('py-3');
+        document.getElementById(collapseID).classList.toggle('px-6');
+      }
+      /* Function for dropdowns */
+      function openDropdown(event, dropdownID) {
+        let element = event.target;
+        while (element.nodeName !== 'A') {
+          element = element.parentNode;
+        }
+        var popper = Popper.createPopper(
+          element,
+          document.getElementById(dropdownID),
+          {
+            placement: 'bottom-end',
+          }
+        );
+        document.getElementById(dropdownID).classList.toggle('hidden');
+        document.getElementById(dropdownID).classList.toggle('block');
+      }
+
+      const file_name = document.getElementById('file_name');
+      const file_input = document.getElementById('file');
+      const files = document.getElementById('files');
+      file_input.addEventListener('change', () => {
+        files.innerHTML = '';
+        Object.entries(file_input.files).forEach((file) => {
+          let name = document.createElement('p');
+          name.innerHTML = file[1].name;
+          files.appendChild(name);
+        });
+      });
+    </script>
   </body>
-  <script>
-    function dropdownHandler(element) {
-      let single = element.getElementsByTagName("ul")[0];
-      single.classList.toggle("hidden");
-    }
-    function MenuHandler(el, val) {
-      let MainList = el.parentElement.getElementsByTagName("ul")[0];
-      let closeIcon =
-        el.parentElement.getElementsByClassName("close-m-menu")[0];
-      let showIcon = el.parentElement.getElementsByClassName("show-m-menu")[0];
-      if (val) {
-        MainList.classList.remove("hidden");
-        el.classList.add("hidden");
-        closeIcon.classList.remove("hidden");
-      } else {
-        showIcon.classList.remove("hidden");
-        MainList.classList.add("hidden");
-        el.classList.add("hidden");
-      }
-    }
-    let sideBar = document.getElementById("mobile-nav");
-    let menu = document.getElementById("menu");
-    let cross = document.getElementById("cross");
-    sideBar.style.transform = "translateX(-100%)";
-    const sidebarHandler = (check) => {
-      if (check) {
-        sideBar.style.transform = "translateX(0px)";
-        menu.classList.add("hidden");
-        cross.classList.remove("hidden");
-      } else {
-        sideBar.style.transform = "translateX(-100%)";
-        menu.classList.remove("hidden");
-        cross.classList.add("hidden");
-      }
-    };
-    let list = document.getElementById("list");
-    let chevrondown = document.getElementById("chevrondown");
-    let chevronup = document.getElementById("chevronup");
-    const listHandler = (check) => {
-      if (check) {
-        list.classList.remove("hidden");
-        chevrondown.classList.remove("hidden");
-        chevronup.classList.add("hidden");
-      } else {
-        list.classList.add("hidden");
-        chevrondown.classList.add("hidden");
-        chevronup.classList.remove("hidden");
-      }
-    };
-    let list2 = document.getElementById("list2");
-    let chevrondown2 = document.getElementById("chevrondown2");
-    let chevronup2 = document.getElementById("chevronup2");
-    const listHandler2 = (check) => {
-      if (check) {
-        list2.classList.remove("hidden");
-        chevrondown2.classList.remove("hidden");
-        chevronup2.classList.add("hidden");
-      } else {
-        list2.classList.add("hidden");
-        chevrondown2.classList.add("hidden");
-        chevronup2.classList.remove("hidden");
-      }
-    };
-    const file_name = document.getElementById("file_name");
-    const file_input = document.getElementById("file");
-    file_input.addEventListener("change", () => {
-      file_name.innerHTML = file_input.files[0].name;
-    });
-  </script>
 </html>

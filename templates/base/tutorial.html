@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  {% include 'head.html' %}
+  <body
+    class="text-blueGray-700 antialiased"
+    style="font-family: 'Inter', sans-serif"
+  >
+    {% include 'base/input_timesheet_modal.html' %}
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      {% include 'sidebar.html' %}
+      <div class="relative md:ml-64 bg-blueGray-50">
+        <nav
+          class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4"
+        >
+          <div
+            class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
+          ></div>
+        </nav>
+        <!-- Header -->
+        <div class="relative bg-purple md:pt-10 pb-32 pt-8"></div>
+        <div class="px-4 md:px-10 mx-auto w-full -m-24">
+          <div class="flex flex-wrap mt-4">
+            <div class="w-full mb-12 xl:mb-0 px-4">
+              <div
+                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+              >
+                <div class="rounded-t mb-0 px-4 py-3 border-0">
+                  <div class="flex flex-wrap items-center">
+                    <div
+                      class="relative w-full px-4 max-w-full flex flex-col justify-center items-center"
+                    >
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Welcome
+                      </h3>
+                      <p>
+                        Welcome to TimeBot! We pride ourselves on making a user
+                        friendly application. After this short tutorial, you
+                        will understand all our site has to offer! I am using a
+                        sample excel file that I crafted for this tutorial, but
+                        please follow along with your own Karbon export!
+                      </p>
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Empty Dashboard
+                      </h3>
+                      <p>
+                        When you first reach the dashboard, you will see the
+                        page that is displayed in the screenshot below. The main
+                        thing to notice are the two date fields in the upper
+                        right corner. These dates filter out the information
+                        that is shown in your tables. It will default to the
+                        current month, but you can change them by clicking the
+                        calendar next to the date.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/empty_dashboard.png' %}"
+                        alt="empty dashboard"
+                      />
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Timesheets
+                      </h3>
+                      <p>
+                        Now click on Timesheets in the left-hand navigation.
+                        This will take you to a page similar to the screenshot
+                        below. This page displays all of your timesheets, the
+                        date range they contain, and the date the timesheet was
+                        entered. Press 'Add New' to input a new timesheet.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/empty_timesheets.png' %}"
+                        alt="empty timesheets"
+                      />
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Input Timesheet
+                      </h3>
+                      <p>
+                        Clicking 'Add New' while on the Timesheets page will
+                        open a box to input a new timesheet. It will prompt you
+                        for the date range that the timesheet contains and an
+                        excel file. To note, the dates that you input here are
+                        solely for your organizational purposes. Each entry will
+                        have a date that is read from the excel sheet regardless
+                        of the dates you select here.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/input_timesheet.png' %}"
+                        alt="input timesheet"
+                      />
+                      <br />
+                      <p>
+                        After you click 'Submit', you will see the timesheet be
+                        automatically added to the timesheets table. If you
+                        input a big excel file, this could take a moment.
+                        Clicking on any row in the Timesheets table will take
+                        you to a page with more detailed information. Please
+                        click on the timesheet you just submitted.
+                      </p>
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Timesheet Details
+                      </h3>
+                      <p>
+                        In the screenshot below, you will see all the entries
+                        from the timesheet you just submitted. These are sorted
+                        by date but not organized in any way; that's what the
+                        other tables are for! You can also delete all entries
+                        from the timesheet by clicking 'Delete Timesheet' in the
+                        upper right-hand corner. Be careful though, there is no
+                        way to retrieve these records once deleted. You will
+                        have to submit the timesheet again.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/timesheet_entries.png' %}"
+                        alt="timesheets"
+                      />
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Clients
+                      </h3>
+                      <p>
+                        Navigate to the Clients table by clicking 'Clients' in
+                        the left-hand navigation. This will show you a page
+                        similar to the screenshot below. This table will show
+                        you the name of the client and total time spent on that
+                        client. Clicking on any client will bring you to a more
+                        detailed page. Please click on any client.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/clients.png' %}"
+                        alt="timesheets"
+                      />
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Client Details
+                      </h3>
+                      <p>
+                        The detailed view of a client is shown in the screenshot
+                        below. It displays every work entry for that client
+                        within the selected dates. For each entry, it displays
+                        the employee, work label, time, and date.
+                      </p>
+                      <img
+                        class="pt-[10px]"
+                        src="{% static 'images/client_details.png' %}"
+                        alt="timesheets"
+                      />
+                      <br />
+                      <h3
+                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px]"
+                      >
+                        Wrap Up
+                      </h3>
+                      <p>
+                        You are now ready to use TimeBot. Detailed views are
+                        available for the Clients, Employees, Roles, Tasks, and
+                        Timesheets tables. If you click on any row in one those
+                        table, you will be brought to a more detailed view. For
+                        support or feedback, please email
+                        thetimebot@protonmail.com!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="block py-4">
+            <div class="container mx-auto px-4">
+              <hr class="mb-4 border-b-1 border-blueGray-200" />
+              <div
+                class="flex flex-wrap items-center md:justify-between justify-center"
+              >
+                <div class="w-full md:w-4/12 px-4">
+                  <div class="text-sm text-blueGray-500 font-semibold py-1">
+                    Copyright © <span id="javascript-date"></span>
+                    <a
+                      href="https://www.creative-tim.com"
+                      class="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
+                    >
+                      TimeBot
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+      charset="utf-8"
+    ></script>
+    <script type="text/javascript">
+      /* Sidebar - Side navigation menu on mobile/responsive mode */
+      function toggleNavbar(collapseID) {
+        document.getElementById(collapseID).classList.toggle('hidden');
+        document.getElementById(collapseID).classList.toggle('bg-white');
+        document.getElementById(collapseID).classList.toggle('m-2');
+        document.getElementById(collapseID).classList.toggle('py-3');
+        document.getElementById(collapseID).classList.toggle('px-6');
+      }
+      /* Function for dropdowns */
+      function openDropdown(event, dropdownID) {
+        let element = event.target;
+        while (element.nodeName !== 'A') {
+          element = element.parentNode;
+        }
+        var popper = Popper.createPopper(
+          element,
+          document.getElementById(dropdownID),
+          {
+            placement: 'bottom-end',
+          }
+        );
+        document.getElementById(dropdownID).classList.toggle('hidden');
+        document.getElementById(dropdownID).classList.toggle('block');
+      }
+
+      const file_name = document.getElementById('file_name');
+      const file_input = document.getElementById('file');
+      const files = document.getElementById('files');
+      file_input.addEventListener('change', () => {
+        files.innerHTML = '';
+        Object.entries(file_input.files).forEach((file) => {
+          let name = document.createElement('p');
+          name.innerHTML = file[1].name;
+          files.appendChild(name);
+        });
+      });
+    </script>
+  </body>
+</html>

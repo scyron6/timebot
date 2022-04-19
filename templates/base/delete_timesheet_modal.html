@@ -1,0 +1,46 @@
+<div id="delete-timesheet" class="modal">
+  <div
+    class="modal-content flex flex-col justify-center items-center text-center min-w-0 break-words mb-6 shadow-lg rounded bg-white text-blueGray-500"
+    style="height: 450px"
+  >
+    <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div class="flex flex-wrap items-center">
+        <div class="relative w-6/8 max-w-full flex-grow flex-1">
+          <div class="rounded-t mb-0 px-6 py-6">
+            <div class="text-center mb-3">
+              <h6 class="text-gray-600 text-xl font-bold">Delete</h6>
+            </div>
+            <hr class="mt-6 border-b-1 border-gray-400" />
+          </div>
+          <form
+            method="post"
+            id="delete-form"
+            action="{% url 'delete_timesheet' timesheet_pk%}"
+          >
+            {% csrf_token %}
+            <label class="block mb-3"
+              >Deleting this timesheet will delete all entries on the timesheet.
+              Are you sure you want to delete?</label
+            >
+            <div class="flex flex-row">
+              <button
+                class="mt-4 bg-red-600 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
+                style="transition: all 0.15s ease 0s"
+              >
+                Delete
+              </button>
+              <button
+                class="mt-4 bg-gray-700 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
+                type="button"
+                style="transition: all 0.15s ease 0s"
+                onclick="document.getElementById('delete-timesheet').style.display='none'"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

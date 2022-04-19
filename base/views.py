@@ -20,15 +20,24 @@ def index(request):
 @login_required(login_url='login')
 def dashboard(request):
 
+    labels = []
+    data = []
     getSessionDates(request)
     
     total_clients = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').distinct().count()
     total_minutes = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).aggregate(Sum('minutes'))
     total_employees = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').distinct().count()
     total_roles = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').distinct().count()
+    time_by_client = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')
     work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
     work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    
+    for entry in time_by_client:
+        labels.append(entry['client'])
+        data.append(entry['total_time'])
+    
+
     context = {
         'total_clients': total_clients,
         'total_minutes': total_minutes,
@@ -37,8 +46,9 @@ def dashboard(request):
         'work_entries_by_client': work_entries_by_client,
         'work_entries_by_employee': work_entries_by_employee,
         'work_entries_by_role': work_entries_by_role,
+        'time_by_client': time_by_client,
         'start_date': request.session['start_date'],
-        'end_date': request.session['end_date']
+        'end_date': request.session['end_date'],
     }
     return render(request, 'base/dashboard.html', context)
 
@@ -136,6 +146,35 @@ def role(request):
     }
     return render(request, 'base/role.html', context)
 
+@login_required(login_url='login')
+def tasks(request):
+    getSessionDates(request)
+
+    work_entries_by_task = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('task').annotate(total_time=Sum('minutes')).order_by('task')
+    context = {
+        'work_entries_by_task': work_entries_by_task,
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
+    }
+    return render(request, 'base/tasks.html', context)
+
+@login_required(login_url='login')
+def task(request):
+    task_name = ""
+    if 'task_name' in request.GET:
+        task_name = request.GET['task_name']
+    
+    getSessionDates(request)
+
+    work_entries_for_task = Work.objects.filter(user=request.user).filter(task=task_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').annotate(total_time=Sum('minutes'))
+
+    context = {
+        'task_name': task_name,
+        'work_entries_for_task': work_entries_for_task,
+        'start_date': request.session['start_date'],
+        'end_date': request.session['end_date'],
+    }
+    return render(request, 'base/task.html', context)
 
 @login_required(login_url='login')
 def timesheets(request):
@@ -206,6 +245,9 @@ def delete_timesheet(request, pk):
 def my_profile(request):
     return render(request, 'base/my_profile.html')
 
+@login_required(login_url='login')
+def tutorial(request):
+    return render(request, 'base/tutorial.html')
 
 @login_required(login_url='login')
 def help(request):

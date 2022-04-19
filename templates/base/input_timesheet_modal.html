@@ -1,0 +1,81 @@
+<div id="input-timesheet" class="modal">
+  <div
+    class="modal-content flex flex-col justify-center items-center text-center min-w-0 break-words mb-6 shadow-lg rounded bg-white text-blueGray-500"
+    style="height: 450px"
+  >
+    <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div class="flex flex-wrap items-center">
+        <div class="relative w-6/8 max-w-full flex-grow flex-1">
+          <div class="rounded-t mb-0 px-6 py-6">
+            <div class="text-center mb-3">
+              <h6 class="text-gray-600 text-xl font-bold">
+                Enter New Timesheet
+              </h6>
+            </div>
+            <hr class="mt-6 border-b-1 border-gray-400" />
+          </div>
+          <form
+            method="post"
+            id="timesheet-form"
+            enctype="multipart/form-data"
+            action="{% url 'timesheets' %}"
+          >
+            {% csrf_token %}
+            <label class="block mb-3">Select Dates</label>
+            <input
+              class="mx-auto border-2 p-[4px]"
+              type="date"
+              required
+              name="start_date"
+            />
+            <span class="mx-4">to</span>
+            <input
+              class="mx-auto border-2 p-[4px]"
+              type="date"
+              required
+              name="end_date"
+            />
+            <label
+              class="block my-4 mx-auto rounded py-2 cursor-pointer text-sm font-bold"
+              style="width: 30%; border: 2px solid"
+            >
+              Choose File
+              <input
+                id="file"
+                type="file"
+                required
+                multiple
+                name="excel_timesheets"
+                accept=".xlsx, .xls"
+                style="display: none"
+              />
+            </label>
+            <div id="files">
+              <p id="file_name">No file selected</p>
+            </div>
+            <!-- <div class="py-2">
+              <input name="download" type="checkbox" value="true" />
+              <label class="pl-2">Download Summary Excel File?</label>
+            </div> -->
+            <div class="flex flex-row">
+              <button
+                class="mt-4 bg-purple text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
+                style="transition: all 0.15s ease 0s"
+              >
+                Submit
+              </button>
+              <button
+                class="mt-4 bg-gray-700 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-1/2"
+                style="transition: all 0.15s ease 0s"
+                type="button"
+                onclick="document.getElementById('input-timesheet').style.display='none'"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
