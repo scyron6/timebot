@@ -29,14 +29,78 @@
                 <div class="rounded-t mb-0 px-4 py-3 border-0">
                   <div class="flex flex-wrap items-center">
                     <div
-                      class="relative w-full px-4 max-w-full flex flex-col justify-center items-center"
+                      class="relative w-full px-4 max-w-full flex flex-col py-8 min-h-screen"
                     >
-                      <h3
-                        class="font-bold text-[24px] text-blueGray-700 pt-[20px] pb-[20px] underline"
+                      <div class="container mx-auto max-w-3xl mt-8 relative">
+                        <h1
+                          class="text-2xl font-bold text-gray-700 px-6 md:px-0"
+                        >
+                          Account Settings
+                        </h1>
+                        <ul
+                          class="flex border-b border-gray-300 text-sm font-medium text-gray-600 mt-3 px-6 md:px-0"
+                        >
+                          <li
+                            class="mr-8 text-gray-900 border-b-2 border-gray-800"
+                          >
+                            <a href="#_" class="py-4 inline-block"
+                              >Profile Info</a
+                            >
+                          </li>
+                          <li class="mr-8 hover:text-gray-900">
+                            <a href="#_" class="py-4 inline-block">Security</a>
+                          </li>
+                          <li class="mr-8 hover:text-gray-900">
+                            <a href="#_" class="py-4 inline-block">Billing</a>
+                          </li>
+                        </ul>
+                        <form>
+                          <!-- @csrf -->
+                          <div
+                            class="w-full bg-white rounded-lg mx-auto mt-8 flex overflow-hidden rounded-b-none"
+                          >
+                            <div class="md:w-2/3 w-full">
+                              <div class="py-8 px-16">
+                                <label for="name" class="text-sm text-gray-600"
+                                  >Name</label
+                                >
+                                <input
+                                  class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
+                                  type="text"
+                                  value=""
+                                  name="name"
+                                  placeholder="Name"
+                                />
+                              </div>
+                              <hr class="border-gray-200" />
+                              <div class="py-8 px-16">
+                                <label for="email" class="text-sm text-gray-600"
+                                  >Email Address</label
+                                >
+                                <input
+                                  class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
+                                  type="email"
+                                  name="email"
+                                  value="{{ user.email }}"
+                                />
+                              </div>
+                              <hr class="border-gray-200" />
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div
+                        class="p-16 py-8 bg-gray-300 clearfix rounded-b-lg border-t border-gray-200 flex justify-between absolute bottom-0 w-full"
                       >
-                        Your Profile
-                      </h3>
-                      <p>{{user.email}}</p>
+                        <p class="text-xs text-gray-500 tracking-tight mt-2">
+                          Click on Save to update your Profile Info
+                        </p>
+                        <input
+                          type="submit"
+                          class="bg-indigo-500 text-white text-sm font-medium px-6 py-2 rounded uppercase cursor-pointer"
+                          value="Save"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
