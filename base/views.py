@@ -75,7 +75,7 @@ def client(request):
         client_name = request.GET['client_name']
     getSessionDates(request)
 
-    work_entries_for_client = Work.objects.filter(user=request.user).filter(client=client_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('employee', 'work', 'minutes', 'date').order_by('date')
+    work_entries_for_client = Work.objects.filter(user=request.user).filter(client=client_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').values('employee', 'work', 'date').annotate(minutes=Sum('minutes')).order_by('date')
 
     context = {
         'client_name': client_name,
