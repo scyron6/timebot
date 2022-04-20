@@ -16,11 +16,19 @@
           <div
             class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
           >
-            <a
-              class="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-              href="#"
-              >{{ employee_name }}</a
-            >
+            <div>
+              <a href="{% url 'employees' %}">
+                <i
+                  class="fa fa-arrow-left text-white text-[24px] pt-2 cursor-pointer"
+                  aria-hidden="true"
+                ></i
+              ></a>
+              <a
+                class="text-white text-[16px] uppercase hidden lg:inline-block font-semibold pl-[16px]"
+                href="#"
+                >{{ employee_name }}</a
+              >
+            </div>
             <div>
               <input
                 class="border-2 p-[4px] rounded"

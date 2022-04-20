@@ -68,6 +68,7 @@
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
                         >
                           Task
+                          <input type="text" id="filter" placeholder="Search" />
                         </th>
                         <th
                           class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
@@ -80,7 +81,7 @@
                       {% for entry in work_entries_by_task %}
                       <tr
                         onclick="window.location.href='{% url 'task' %}?task_name={{ entry.task }}'"
-                        class="cursor-pointer"
+                        class="cursor-pointer task"
                       >
                         <th
                           class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
@@ -123,6 +124,22 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      const filter = document.getElementById('filter');
+      const tasks = document.querySelectorAll('.task');
+
+      filter.addEventListener('input', (e) => filterData(e.target.value));
+
+      function filterData(searchTerm) {
+        tasks.forEach((task) => {
+          if (task.innerText.toLowerCase().includes(searchTerm.toLowerCase())) {
+            task.classList.remove('hide');
+          } else {
+            task.classList.add('hide');
+          }
+        });
+      }
+    </script>
     <script type="text/javascript">
       const purple = document.querySelector('{{ sidebar_select }}');
       purple.classList.add('text-purple');
