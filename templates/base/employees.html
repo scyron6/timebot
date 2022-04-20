@@ -15,35 +15,10 @@
         >
           <div
             class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
-          >
-            <a
-              class="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-              href="#"
-              >Employees</a
-            >
-            <div>
-              <input
-                class="border-2 p-[4px] rounded"
-                type="date"
-                required
-                name="start_date"
-                id="start_date"
-                value="{{ start_date }}"
-              />
-              <span class="mx-4 text-white">to</span>
-              <input
-                class="border-2 p-[4px] rounded"
-                type="date"
-                required
-                name="end_date"
-                id="end_date"
-                value="{{ end_date }}"
-              />
-            </div>
-          </div>
+          ></div>
         </nav>
         <!-- Header -->
-        <div class="relative bg-purple md:pt-32 pb-32 pt-12"></div>
+        <div class="relative bg-purple md:pt-10 pb-32 pt-8"></div>
         <div class="px-4 md:px-10 mx-auto w-full -m-24">
           <div class="flex flex-wrap mt-4">
             <div class="w-full mb-12 xl:mb-0 px-4">
@@ -58,6 +33,27 @@
                       <h3 class="font-semibold text-base text-blueGray-700">
                         Employees
                       </h3>
+                    </div>
+                    <div
+                      class="relative w-full px-4 max-w-full flex-grow flex-1 text-right"
+                    >
+                      <input
+                        class="border-2 p-[4px] rounded"
+                        type="date"
+                        required
+                        name="start_date"
+                        id="start_date"
+                        value="{{ start_date }}"
+                      />
+                      <span class="mx-4 text-white">to</span>
+                      <input
+                        class="border-2 p-[4px] rounded"
+                        type="date"
+                        required
+                        name="end_date"
+                        id="end_date"
+                        value="{{ end_date }}"
+                      />
                     </div>
                   </div>
                 </div>
@@ -127,6 +123,10 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      const purple = document.querySelector('{{ sidebar_select }}');
+      purple.classList.add('text-purple');
+    </script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
       charset="utf-8"

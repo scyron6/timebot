@@ -32,6 +32,7 @@ def dashboard(request):
     work_entries_by_client = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('client').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     work_entries_by_employee = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').order_by('employee').annotate(total_time=Sum('minutes'))
     work_entries_by_role = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('role').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
+    work_entries_by_task = Work.objects.filter(user=request.user).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('task').annotate(total_time=Sum('minutes')).order_by('-total_time')[:5]
     
     for entry in time_by_client:
         labels.append(entry['client'])
@@ -46,9 +47,11 @@ def dashboard(request):
         'work_entries_by_client': work_entries_by_client,
         'work_entries_by_employee': work_entries_by_employee,
         'work_entries_by_role': work_entries_by_role,
+        'work_entries_by_task': work_entries_by_task,
         'time_by_client': time_by_client,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#dashboard_nav'
     }
     return render(request, 'base/dashboard.html', context)
 
@@ -61,6 +64,7 @@ def clients(request):
         'work_entries_by_client': work_entries_by_client,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#clients_nav'
     }
     return render(request, 'base/clients.html', context)
 
@@ -78,6 +82,7 @@ def client(request):
         'work_entries_for_client': work_entries_for_client,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#clients_nav'
     }
     return render(request, 'base/client.html', context)
 
@@ -90,6 +95,7 @@ def employees(request):
         'work_entries_by_employee': work_entries_by_employee,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#employees_nav'
     }
     return render(request, 'base/employees.html', context)
 
@@ -112,6 +118,7 @@ def employee(request):
         'time_by_role': time_by_role,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#employees_nav'
     }
     return render(request, 'base/employee.html', context)
 
@@ -125,6 +132,7 @@ def roles(request):
         'work_entries_by_role': work_entries_by_role,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#roles_nav'
     }
     return render(request, 'base/roles.html', context)
 
@@ -136,13 +144,14 @@ def role(request):
     
     getSessionDates(request)
 
-    work_entries_for_role = Work.objects.filter(user=request.user).filter(role=role_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee', 'minutes', 'date').order_by('date')
+    work_entries_for_role = Work.objects.filter(user=request.user).filter(role=role_name).filter(date__range=[request.session['start_date'],request.session['end_date']]).values('employee').annotate(total_time=Sum('minutes'))
 
     context = {
         'role_name': role_name,
         'work_entries_for_role': work_entries_for_role,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#roles_nav'
     }
     return render(request, 'base/role.html', context)
 
@@ -155,6 +164,7 @@ def tasks(request):
         'work_entries_by_task': work_entries_by_task,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#tasks_nav'
     }
     return render(request, 'base/tasks.html', context)
 
@@ -173,6 +183,7 @@ def task(request):
         'work_entries_for_task': work_entries_for_task,
         'start_date': request.session['start_date'],
         'end_date': request.session['end_date'],
+        'sidebar_select': '#tasks_nav'
     }
     return render(request, 'base/task.html', context)
 
@@ -207,7 +218,8 @@ def timesheets(request):
 
     timesheets = Timesheet.objects.filter(user=request.user).values('file_name', 'start_date', 'end_date', 'submission_date', 'pk').order_by('start_date')
     context = {
-        'timesheets': timesheets
+        'timesheets': timesheets,
+        'sidebar_select': '#timesheets_nav'
     }
     return render(request, 'base/timesheets.html', context)
 
@@ -224,7 +236,8 @@ def timesheet(request, pk):
         'timesheet_filename': timesheet.file_name,
         'timesheet_start_date': timesheet.start_date,
         'timesheet_end_date': timesheet.end_date,
-        'timesheet_entries': timesheet_entries
+        'timesheet_entries': timesheet_entries,
+        'sidebar_select': '#timesheets_nav'
     }
     return render(request, 'base/timesheet.html', context)
 
@@ -243,16 +256,17 @@ def delete_timesheet(request, pk):
 
 @login_required(login_url='login')
 def my_profile(request):
-    return render(request, 'base/my_profile.html')
+    context = {
+        'sidebar_select': '#profile_nav'
+    }
+    return render(request, 'base/my_profile.html', context)
 
 @login_required(login_url='login')
 def tutorial(request):
-    return render(request, 'base/tutorial.html')
-
-@login_required(login_url='login')
-def help(request):
-    return render(request, 'base/help.html')
-
+    context = {
+        'sidebar_select': '#tutorial_nav'
+    }
+    return render(request, 'base/tutorial.html', context)
 
 def registerPage(request):
     if request.method == 'POST':

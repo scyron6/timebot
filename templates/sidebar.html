@@ -45,42 +45,60 @@
         </div>
       </div>
       <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="dashboard_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'dashboard' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Dashboard</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="clients_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'clients' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Clients</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="employees_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'employees' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Employees</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="roles_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'roles' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Roles</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="tasks_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'tasks' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Tasks</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="timesheets_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'timesheets' %}"
@@ -88,14 +106,20 @@
           >
         </li>
         <hr class="my-4 md:min-w-full" />
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="tutorial_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'tutorial' %}"
             ><i class="fas fa-tv mr-2 text-sm"></i> Tutorial</a
           >
         </li>
-        <li class="items-center text-blueGray-700 hover:text-indigo-600">
+        <li
+          class="items-center text-blueGray-700 hover:text-indigo-600"
+          id="profile_nav"
+        >
           <a
             class="text-xs uppercase py-3 font-bold block"
             href="{% url 'my_profile' %}"
